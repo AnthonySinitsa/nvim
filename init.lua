@@ -1,18 +1,3 @@
---[[
-
-    If you don't know anything about Lua, I recommend taking some time to read through
-    a guide. One possible example which will only take 10-15 minutes:
-      - https://learnxinyminutes.com/docs/lua/
-
-    After understanding a bit more about Lua, you can use `:help lua-guide` as a
-    reference for how Neovim integrates Lua.
-    - :help lua-guide
-    - (or HTML version): https://neovim.io/doc/user/lua-guide.html
-
-If you experience any errors while trying to install kickstart, run `:checkhealth` for more info.
-
---]]
-
 -- Set <space> as the leader key
 --  NOTE: Must happen before plugins are loaded (otherwise wrong leader will be used)
 vim.g.mapleader = ' '
@@ -385,11 +370,13 @@ require('lazy').setup({
           },
         },
         ts_ls = {},
+        eslint = {},
       }
 
       local ensure_installed = vim.tbl_keys(servers or {})
       vim.list_extend(ensure_installed, {
         'stylua',
+        --'prettierd',
       })
       require('mason-tool-installer').setup { ensure_installed = ensure_installed }
 
@@ -506,18 +493,15 @@ require('lazy').setup({
   },
 
   {
-    'ellisonleao/gruvbox.nvim',
+    'navarasu/onedark.nvim',
     priority = 1000,
     config = function()
-      ---@diagnostic disable-next-line: missing-fields
-      require('gruvbox').setup {
-        contrast = 'hard',
+      require('onedark').setup {
+        style = 'dark', -- Other options: 'dark', 'cool', 'deep', 'warm', 'warmer', 'light'
       }
-
-      vim.cmd.colorscheme 'gruvbox'
+      require('onedark').load()
     end,
   },
-
   { 'folke/todo-comments.nvim', event = 'VimEnter', dependencies = { 'nvim-lua/plenary.nvim' }, opts = { signs = false } },
 
   {
