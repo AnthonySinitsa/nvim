@@ -369,14 +369,11 @@ require('lazy').setup({
             },
           },
         },
-        ts_ls = {},
-        eslint = {},
       }
 
       local ensure_installed = vim.tbl_keys(servers or {})
       vim.list_extend(ensure_installed, {
         'stylua',
-        --'prettierd',
       })
       require('mason-tool-installer').setup { ensure_installed = ensure_installed }
 
@@ -525,13 +522,81 @@ require('lazy').setup({
     build = ':TSUpdate',
     main = 'nvim-treesitter.configs',
     opts = {
-      ensure_installed = { 'bash', 'c', 'diff', 'html', 'lua', 'luadoc', 'markdown', 'markdown_inline', 'query', 'vim', 'vimdoc' },
+      ensure_installed = {
+        'bash',
+        'c',
+        'diff',
+        'html',
+        'lua',
+        'luadoc',
+        'markdown',
+        'markdown_inline',
+        'query',
+        'vim',
+        'vimdoc',
+        'typescript',
+        'tsx',
+        'javascript',
+      },
       auto_install = true,
       highlight = {
         enable = true,
         additional_vim_regex_highlighting = { 'ruby' },
       },
       indent = { enable = true, disable = { 'ruby' } },
+    },
+  },
+  {
+    'pmizio/typescript-tools.nvim',
+    dependencies = { 'nvim-lua/plenary.nvim', 'neovim/nvim-lspconfig' },
+    -- filetypes to attach to
+    ft = { 'typescript', 'typescriptreact', 'javascript', 'javascriptreact' },
+    opts = {
+      -- This is the recommended settings for a VS Code-like experience
+      settings = {
+        -- spawn additional tsserver instance to calculate diagnostics on it
+        separate_diagnostic_server = true,
+        -- "change"|"insert_leave" determine when the client asks the server about diagnostic
+        publish_diagnostic_on = 'insert_leave',
+        -- array of lsp clients to which server will not send diagnostics
+        ignore_diagnostic_clients = {},
+        -- enable completion suggestions from the server
+        completion_supported = true,
+        -- enhance lsp formatting capabilities
+        formatter = 'auto', -- can be "prettier", "prettierd", "deno_fmt", "auto" or nil
+        -- speed up formatting on save by default
+        format_on_save = true,
+        -- filter diagnostics based on ignore patterns from tsconfig.json
+        filter_out_tsconfig_ignored_files = true,
+        -- flags to pass starting tsserver, e.g. "--logVerbosity verbose"
+        tsserver_flags = {},
+        -- env variables to pass starting tsserver, e.g. { "TSS_LOG" = "-level verbose -file /tmp/tss.log" }
+        tsserver_env = {},
+        -- locale of all tsserver messages, e.g. "pt-BR"
+        tsserver_locale = 'en',
+        -- directory where to store tsserver log files, disabled if nil
+        tsserver_log_directory = nil,
+        -- verbosity of tsserver log files, "normal" | "terse" | "verbose"
+        tsserver_log_verbosity = 'normal',
+        -- enable navigation to files referenced in outbound diagnostics
+        enable_aria_diagnostics = false,
+        -- list of custom handlers for specifictsserver requests
+        custom_handlers = {},
+        -- buffer number or list of buffer numbers to ignore diagnostics for
+        ignore_diagnostics = {},
+        -- Code actions to be executed on save
+        code_actions_on_save = {
+          source_fixall = true,
+          source_organizeImports = true,
+        },
+        -- file extensions to watch for changes, without the dot
+        -- e.g. { "vue", "svelte" }
+        extra_file_extensions = {},
+        -- provide inlay hints
+        inlay_hints = {
+          enabled = false, -- set to true to enable inlay hints
+        },
+      },
     },
   },
 
